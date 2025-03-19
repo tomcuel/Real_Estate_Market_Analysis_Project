@@ -31,9 +31,9 @@ Real_Estate_Market_Analysis_Project /
 * [Datasets](./Datasets/) : folder containing the datasets
 * [Results](./Results/) : contains the figures you get when computing the R code
     * [Data_Cleaning](./Results/Data_Cleaning/) : figures used to visualize data treatment steps 
-    * [Data_Cleaning](./Results/Prediction/) : prediction related figures
-    * [Data_Cleaning](./Results/Raw_Graphs/) : raw representation of the datas 
-    * [Data_Cleaning](./Results/Tendance_Saison/) : graphs related to getting trends and saisonnality 
+    * [Prediction](./Results/Prediction/) : prediction related figures
+    * [Raw_Graphs](./Results/Raw_Graphs/) : raw representation of the datas 
+    * [Tendance_Saison](./Results/Tendance_Saison/) : graphs related to getting trends and saisonnality 
 
 
 ## Running the code 
@@ -68,6 +68,14 @@ forecast
 * Statistical modeling (Gaussian kernel smoothing, polynomial regression, moving averages).
 * Time series forecasting (exponential smoothing, validation, and prediction).
 
+## Dataset Description
+The dataset contains key attributes about real estate properties:
+* date: transaction date.
+* area_land, area_living: Total living area (in m²).
+* price: sale price of the property.
+* position_wgs, x_lbt93, y_lbt93, category, n_rooms, shape_wgs : non useful additional information 
+<img src="./Resuls/Data_Cleaning/csv_visualisation.png" alt="csv_visualisation" width="750" height="150"/>
+We first analyze the distribution of these attributes and clean the dataset before performing modeling and predictions.
 
 ## Data Processing
 To ensure data quality, we applied the following preprocessing steps:
@@ -83,7 +91,8 @@ To ensure data quality, we applied the following preprocessing steps:
 
 #### Data Normalization
 * Standardized numerical features for better model performance.
-* After cleaning, the dataset was exported for further modeling and analysis.
+
+After cleaning, the dataset was exported for further modeling and analysis.
 
 ## Descriptive Analysis
 We performed time-series visualization to detect trends and seasonal patterns:
@@ -115,8 +124,8 @@ To analyze trends, we applied several smoothing techniques:
 We built predictive models using historical data to estimate future prices.
 
 #### Prediction on Known Data
-Tested models against existing data to evaluate performance.
-Local polynomials outperformed Gaussian kernels, which sometimes predicted negative prices.
+* Tested models against existing data to evaluate performance.
+* Local polynomials outperformed Gaussian kernels, which sometimes predicted negative prices.
 
 #### Cross-Validation
 * Validated models using cross-validation.
@@ -125,4 +134,3 @@ Local polynomials outperformed Gaussian kernels, which sometimes predicted negat
 #### Forecasting Future Prices
 * Predicted price trends for the next year.
 * Oserved a decline in total sales, likely due to COVID-19 market disruptions, since it's predicting the year after
-
