@@ -123,7 +123,7 @@ To analyze trends, we applied several smoothing techniques:
 * Modeled price evolution using local polynomial approximations.
 * Compared residual autocorrelation with previous methods.
 
-<img src="./Results/Tendace_Saison/total_price_weekly_loess_tendance_saison.png" alt="total_price_weekly_loess_tendance_saison" width="400" height="200"/>
+<img src="./Results/Tendance_Saison/total_price_weekly_loess_tendance_saison.png" alt="total_price_weekly_loess_tendance_saison" width="400" height="200"/>
 
 #### Exponential Smoothing
 * Implemented simple and double exponential smoothing.
