@@ -28,10 +28,12 @@ Real_Estate_Market_Analysis_Project /
 ```
 
 ## Direct links to folders
-* [TP1](./TP1/) : Implementation of the Newton's method for finding static equilibrium of a chain
-    * [Results](./TP1/Results/) : contains folders to store the different result pictures
-* [TP2](./TP2/) : Implementation of the proximal gradient methods for image deblurring  
-    * [Results](./TP2/Results/) : contains folders to store the different result pictures
+* [Datasets](./Datasets/) : folder containing the datasets
+* [Results](./Results/) : contains the figures you get when computing the R code
+    * [Data_Cleaning](./Results/Data_Cleaning/) : figures used to visualize data treatment steps 
+    * [Data_Cleaning](./Results/Prediction/) : prediction related figures
+    * [Data_Cleaning](./Results/Raw_Graphs/) : raw representation of the datas 
+    * [Data_Cleaning](./Results/Tendance_Saison/) : graphs related to getting trends and saisonnality 
 
 
 ## Running the code 
