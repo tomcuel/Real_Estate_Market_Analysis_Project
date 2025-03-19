@@ -75,6 +75,7 @@ The dataset contains key attributes about real estate properties:
 * area_land, area_living: Total living area (in m²).
 * price: sale price of the property.
 * position_wgs, x_lbt93, y_lbt93, category, n_rooms, shape_wgs: non useful additional information 
+
 <img src="./Results/Data_Cleaning/csv_visualisation.png" alt="csv_visualisation" width="750" height="75"/>
 We first analyze the distribution of these attributes and clean the dataset before performing modeling and predictions.
 
@@ -121,6 +122,8 @@ To analyze trends, we applied several smoothing techniques:
 #### Local Polynomial Regression
 * Modeled price evolution using local polynomial approximations.
 * Compared residual autocorrelation with previous methods.
+
+<img src="./Results/Raw_Graphs/total_price_weekly_loess_tendance_saison.png" alt="total_price_weekly_loess_tendance_saison" width="400" height="200"/>
 
 #### Exponential Smoothing
 * Implemented simple and double exponential smoothing.
