@@ -74,7 +74,7 @@ The dataset contains key attributes about real estate properties:
 * area_land, area_living: Total living area (in m²).
 * price: sale price of the property.
 * position_wgs, x_lbt93, y_lbt93, category, n_rooms, shape_wgs : non useful additional information 
-<img src="./Resuls/Data_Cleaning/csv_visualisation.png" alt="csv_visualisation" width="750" height="150"/>
+<img src="./Results/Data_Cleaning/csv_visualisation.png" alt="csv_visualisation" width="750" height="150"/>
 We first analyze the distribution of these attributes and clean the dataset before performing modeling and predictions.
 
 ## Data Processing
