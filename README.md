@@ -132,7 +132,7 @@ To analyze trends, we applied several smoothing techniques:
 ## Price Prediction
 We built predictive models using historical data to estimate future prices.
 
-<img src="./Results/Prédiction /price_total_price_weekly_predict_expo.png" alt="price_total_price_weekly_predict_expo" width="400" height="200"/>
+<img src="./Results/Prédiction/price_total_price_weekly_predict_expo.png" alt="price_total_price_weekly_predict_expo" width="400" height="200"/>
 
 #### Prediction on Known Data
 * Tested models against existing data to evaluate performance.
