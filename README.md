@@ -103,8 +103,8 @@ We performed time-series visualization to detect trends and seasonal patterns:
 * The COVID-19 pandemic had a temporary effect on transactions.
 
 Here are some raw graphs as examples : 
-<img src="./Results/Data_Cleaning/price_house_weekly_tendance.png" alt="price_house_weekly_tendance" width="400" height="200"/>
-<img src="./Results/Data_Cleaning/area_weekly_tendance.png" alt="area_weekly_tendance" width="400" height="200"/>
+<img src="./Results/Raw_Graphs/price_house_weekly_tendance.png" alt="price_house_weekly_tendance" width="400" height="200"/>
+<img src="./Results/Raw_Graphs/area_weekly_tendance.png" alt="area_weekly_tendance" width="400" height="200"/>
 
 ## Trend and Seasonality Extraction
 To analyze trends, we applied several smoothing techniques:
