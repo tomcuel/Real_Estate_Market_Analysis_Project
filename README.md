@@ -67,13 +67,14 @@ forecast
 * Exploratory data analysis (distribution, trends, seasonality).
 * Statistical modeling (Gaussian kernel smoothing, polynomial regression, moving averages).
 * Time series forecasting (exponential smoothing, validation, and prediction).
+* More details in the report [See the PDF report](rapport.pdf)
 
 ## Dataset Description
 The dataset contains key attributes about real estate properties:
 * date: transaction date.
 * area_land, area_living: Total living area (in m²).
 * price: sale price of the property.
-* position_wgs, x_lbt93, y_lbt93, category, n_rooms, shape_wgs : non useful additional information 
+* position_wgs, x_lbt93, y_lbt93, category, n_rooms, shape_wgs: non useful additional information 
 <img src="./Results/Data_Cleaning/csv_visualisation.png" alt="csv_visualisation" width="750" height="75"/>
 We first analyze the distribution of these attributes and clean the dataset before performing modeling and predictions.
 
@@ -100,6 +101,10 @@ We performed time-series visualization to detect trends and seasonal patterns:
 * Price per square meter is rising, showing market expansion, while areas don't move.
 * Number of transactions follows a seasonal pattern, with higher sales in summer and lower in winter.
 * The COVID-19 pandemic had a temporary effect on transactions.
+
+Here are some raw graphs as examples : 
+<img src="./Results/Data_Cleaning/price_house_weekly_tendance.png" alt="price_house_weekly_tendance" width="400" height="200"/>
+<img src="./Results/Data_Cleaning/area_weekly_tendance.png" alt="area_weekly_tendance" width="400" height="200"/>
 
 ## Trend and Seasonality Extraction
 To analyze trends, we applied several smoothing techniques:
