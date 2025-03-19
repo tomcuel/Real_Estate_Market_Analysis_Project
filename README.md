@@ -8,9 +8,11 @@ The dataset can be found on the Kaggle website via this link (https://www.kaggle
 * [Direct Links to Folders](#direct-links-to-folders)  
 * [Running the code](#running-the-code) 
 * [Overview](#overview)
-* [](#)
-* [](#)
-* [](#)
+* [Data Processing](#data-processing)
+* [Dataset Description](#dataset-description)
+* [Descriptive Analysis](#descriptive-analysis)
+* [Trend and Seasonality Extraction](#trend-and-seasonality-extraction)
+* [Price Prediction](#price-prediction)
 
 ## Path tree
 ```
