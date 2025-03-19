@@ -17,9 +17,16 @@ plot_digraph <- FALSE
 plot_raw_graphs <- TRUE
 plot_tendance_saison <- TRUE
 
-# Lire le fichier CSV de base
-df2 <- read.csv("Projet/datasets_STA202/house_prices_france.csv", stringsAsFactors = FALSE, header = TRUE) # fichier avec les outlayers
-df <- read.csv("Projet/datasets_STA202/house_prices_france.csv", stringsAsFactors = FALSE, header = TRUE)
+# Lire le fichier CSV avec moins de colonnes --> aide si pas le dataset complet, attention aux graphiques de corrélations qui ne fonctionneront pas
+# df <- read.csv("Datasets/house_prices_france.csv", stringsAsFactors = FALSE, header = TRUE) # fichier avec les outlayers
+# getting only the necessary columns
+# df <- df %>% select(date, area_living, area_land, price)
+# writing it into a new csv file
+# write.csv(df, "Datasets/house_prices_france_less_columns.csv", row.names = FALSE)
+
+
+df2 <- read.csv("Datasets/house_prices_france.csv", stringsAsFactors = FALSE, header = TRUE) # fichier avec les outlayers
+df <- read.csv("Datasets/house_prices_france.csv", stringsAsFactors = FALSE, header = TRUE)
 summary(df)
 str(df)
 
@@ -29,7 +36,7 @@ boxplot_before <- ggplot(df, aes(y = price)) +
   ggtitle("Boxplot des prix avant suppression des valeurs aberrantes") +
   scale_y_continuous(labels = label_number(suffix = " €"))
 print(boxplot_before)
-ggsave("Projet/Results/Data_Cleaning/boxplot_before_cleaning.png", plot = boxplot_before, width = 8, height = 6, dpi = 300)
+ggsave("Results/Data_Cleaning/boxplot_before_cleaning.png", plot = boxplot_before, width = 8, height = 6, dpi = 300)
 
 # Supprimer les valeurs nulles pour le prix
 df_clean <- df %>% filter(!is.na(price))
@@ -43,7 +50,7 @@ plot_distribution <- ggplot(df_clean, aes(x = price)) +
   scale_x_continuous(labels = scales::label_comma(suffix = " €")) +  # Ajout des séparateurs de milliers et €
   theme_minimal()
 print(plot_distribution)
-ggsave("Projet/Results/Data_Cleaning/distribution_prix_maisons.png", plot = plot_distribution, width = 8, height = 5, dpi = 300)
+ggsave("Results/Data_Cleaning/distribution_prix_maisons.png", plot = plot_distribution, width = 8, height = 5, dpi = 300)
 
 
 # Appliquer la transformation logarithmique aux prix
@@ -54,7 +61,7 @@ plot_log_distribution <- ggplot(df_clean, aes(x = log_price)) +
   ggtitle("Distribution des prix après transformation logarithmique") +
   xlab("Log(Prix)") + ylab("Fréquence")
 print(plot_log_distribution)
-ggsave("Projet/Results/Data_Cleaning/distribution_log_prix.png", plot = plot_log_distribution, width = 8, height = 5, dpi = 300)
+ggsave("Results/Data_Cleaning/distribution_log_prix.png", plot = plot_log_distribution, width = 8, height = 5, dpi = 300)
 
 # Filtrer les valeurs où log_price est supérieur ou égal à 9
 #df_clean <- df_clean %>% filter(log_price >= 8.5)
@@ -95,13 +102,13 @@ boxplot_after <- ggplot(df, aes(y = price)) +
   scale_y_continuous(labels = label_number(suffix = " €"))
 print(boxplot_after)
 # Sauvegarde du graphique
-ggsave("Projet/Results/Data_Cleaning/boxplot_after_cleaning.png", plot = boxplot_after, width = 8, height = 6, dpi = 300)
+ggsave("Results/Data_Cleaning/boxplot_after_cleaning.png", plot = boxplot_after, width = 8, height = 6, dpi = 300)
 
 # Calculer la matrice de corrélation et sélectionner les variables les plus corrélées
 # Calcul de la matrice de corrélation
 cor_matrix <- cor(df[, sapply(df, is.numeric)], use = "complete.obs")
 # Sauvegarde du corrplot
-png("Projet/Results/Data_Cleaning/correlation_matrix.png", width = 800, height = 600)
+png("Results/Data_Cleaning/correlation_matrix.png", width = 800, height = 600)
 corrplot(cor_matrix, method = "circle")
 dev.off()
 
@@ -155,7 +162,7 @@ df <- bind_rows(df2, df_outliers)
 df <- df %>% distinct()
 
 # Exporter le nouveau fichier CSV avec les données nettoyées
-write.csv(df, "Projet/datasets_STA202/house_prices_france_cleaned.csv", row.names = FALSE)
+write.csv(df, "Datasets/house_prices_france_cleaned.csv", row.names = FALSE)
 
 # Visualisation de la distribution des prix avant et après transformation
 plot_new_histogram <- ggplot(df, aes(x = price)) + 
@@ -164,7 +171,7 @@ plot_new_histogram <- ggplot(df, aes(x = price)) +
   scale_x_continuous(labels = scales::comma) +  # Format en euros
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_new_histogram)
-ggsave("Projet/Results/Data_Cleaning/distribution_prix_apres_nettoyage.png", plot = plot_new_histogram, width = 8, height = 5, dpi = 300)
+ggsave("Results/Data_Cleaning/distribution_prix_apres_nettoyage.png", plot = plot_new_histogram, width = 8, height = 5, dpi = 300)
 
 df$log_price <- log(df$price + 1)  # Transformation logarithmique
 plot_new_histogram_log <- ggplot(df, aes(x = log_price)) +
@@ -172,14 +179,20 @@ plot_new_histogram_log <- ggplot(df, aes(x = log_price)) +
   ggtitle("Distribution des prix après transformation logarithmique") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_new_histogram_log)
-ggsave("Projet/Results/Data_Cleaning/distribution_log_prix_apres_nettoyage.png", plot = plot_new_histogram_log, width = 8, height = 5, dpi = 300)
+ggsave("Results/Data_Cleaning/distribution_log_prix_apres_nettoyage.png", plot = plot_new_histogram_log, width = 8, height = 5, dpi = 300)
 
 
 
+# Lire le fichier CSV avec moins de colonnes --> aide si pas le dataset complet, attention aux graphiques de corrélations qui ne fonctionneront pas
+# df <- read.csv("Datasets/house_prices_france_cleaned.csv", stringsAsFactors = FALSE, header = TRUE)
+# getting only the necessary columns
+# df <- df %>% select(date, area_living, area_land, price)
+# writing it into a new csv file
+# write.csv(df, "Datasets/house_prices_france_cleaned_less_columns.csv", row.names = FALSE)
 
 
 # Lire le fichier nettoyé
-df <- read.csv("Projet/datasets_STA202/house_prices_france_cleaned.csv", stringsAsFactors = FALSE, header = TRUE)
+df <- read.csv("Datasets/house_prices_france_cleaned.csv", stringsAsFactors = FALSE, header = TRUE)
 # Transformation de la colonne date
 df$date <- as.Date(df$date, format = "%Y-%m-%d")
 df$week <- floor_date(df$date, "week")
@@ -203,7 +216,7 @@ plot_total_price_weekly_xts <- ggplot(df_total_weekly_price, aes(x = week, y = p
   labs(title = "Évolution du prix total des maisons vendues par semaine", y = "Prix total (en €)", x = "Temps") +
   theme_minimal()
 print(plot_total_price_weekly_xts)
-ggsave("Projet/Results/Raw_Graphs/total_price_weekly.png", plot = plot_total_price_weekly_xts, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/total_price_weekly.png", plot = plot_total_price_weekly_xts, width = 8, height = 5, dpi = 300)
 }
 
 # Graphique interactif avec dygraphs
@@ -226,7 +239,7 @@ plot_total_price_weekly_xts_tendance <- ggplot(df_total_weekly_price, aes(x = we
   labs(title = "Évolution du prix total par semaine avec tendance linéaire", y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_total_price_weekly_xts_tendance)
-ggsave("Projet/Results/Raw_Graphs/total_price_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/total_price_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
 }
 
 # Tracer les graphiques de tendance et de saisonnalité
@@ -249,7 +262,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec tendance par moyenne mobile", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_tendance)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_moyenne_mobile_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_moyenne_mobile_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
 
     ## Par moyenne mobile = dégager la tendance + détecter la saisonnalité 
     K <- nb_points_moyenne_mobile_saison
@@ -263,7 +276,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec saisonnalité par moyenne mobile", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_saison)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_moyenne_mobile_saison.png", plot = plot_total_price_weekly_xts_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_moyenne_mobile_saison.png", plot = plot_total_price_weekly_xts_saison, width = 8, height = 5, dpi = 300)
 
     # Création du graphique avec tendance et saisonnalité
     plot_total_price_weekly_xts_tendance_saison <- ggplot(df_total_weekly_price, aes(x = week, y = price)) +
@@ -274,7 +287,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec tendance et saisonnalité par moyenne mobile", y = "Prix total (en €)", x = "Temps") +
           theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_tendance_saison)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_moyenne_mobile_tendance_saison.png", plot = plot_total_price_weekly_xts_tendance_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_moyenne_mobile_tendance_saison.png", plot = plot_total_price_weekly_xts_tendance_saison, width = 8, height = 5, dpi = 300)
     
 
 ## Noyau Gaussien ##
@@ -301,7 +314,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec noyau gaussien", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_kernel)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_kernel_tendance.png", plot = plot_total_price_weekly_xts_kernel, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_kernel_tendance.png", plot = plot_total_price_weekly_xts_kernel, width = 8, height = 5, dpi = 300)
 
     # Extraction de la saisonnalité
     X.detrend <- X - as.numeric(ychap.kernel)
@@ -317,7 +330,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec saisonnalité par noyau gaussien", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_kernel_saison)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_kernel_saison.png", plot = plot_total_price_weekly_xts_kernel_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_kernel_saison.png", plot = plot_total_price_weekly_xts_kernel_saison, width = 8, height = 5, dpi = 300)
 
     # Création du graphique avec tendance et saisonnalité
     plot_total_price_weekly_xts_kernel_tendance_saison <- ggplot(df_total_weekly_price, aes(x = week, y = price)) +
@@ -328,12 +341,12 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec tendance et saisonnalité par noyau gaussien", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_kernel_tendance_saison)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_kernel_tendance_saison.png", plot = plot_total_price_weekly_xts_kernel_tendance_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_kernel_tendance_saison.png", plot = plot_total_price_weekly_xts_kernel_tendance_saison, width = 8, height = 5, dpi = 300)
 
     # Calcul de l'autocorrélation des résidus issus de la décomposition en tendance et saisonnalité
     residus <- total_price_weekly_xts - ychap.kernel - ychap.season
     # Save the ACF plot as a file
-    png("Projet/Results/Tendance_Saison/acf_residus_gaussien_total_price_weekly.png", width = 800, height = 500, res = 100)
+    png("Results/Tendance_Saison/acf_residus_gaussien_total_price_weekly.png", width = 800, height = 500, res = 100)
     acf(residus, main = "Autocorrélation des résidus de la décomposition par noyau gaussien")
     dev.off()
 
@@ -349,7 +362,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec polynômes locaux", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_loess)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_loess_tendance.png", plot = plot_total_price_weekly_xts_loess, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_loess_tendance.png", plot = plot_total_price_weekly_xts_loess, width = 8, height = 5, dpi = 300)
 
     # Extraction de la saisonnalité
     model.detrend <- df_total_weekly_price$price - model.lo
@@ -363,7 +376,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec saisonnalité par polynômes locaux", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_loess_saison)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_loess_saison.png", plot = plot_total_price_weekly_xts_loess_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_loess_saison.png", plot = plot_total_price_weekly_xts_loess_saison, width = 8, height = 5, dpi = 300)
 
     # Création du graphique avec tendance et saisonnalité
     plot_total_price_weekly_xts_loess_tendance_saison <- ggplot(df_total_weekly_price, aes(x = week, y = price)) +
@@ -374,12 +387,12 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix total de ventes par semaine avec tendance et saisonnalité par polynômes locaux", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_loess_tendance_saison)
-    ggsave("Projet/Results/Tendance_Saison/total_price_weekly_loess_tendance_saison.png", plot = plot_total_price_weekly_xts_loess_tendance_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/total_price_weekly_loess_tendance_saison.png", plot = plot_total_price_weekly_xts_loess_tendance_saison, width = 8, height = 5, dpi = 300)
 
     # Calcul de l'autocorrélation des résidus issus de la décomposition en tendance et saisonnalité
     residus <- df_total_weekly_price$price - model.lo
     # Save the ACF plot as a file
-    png("Projet/Results/Tendance_Saison/acf_residus_loess_total_price_weekly.png", width = 800, height = 500, res = 100)
+    png("Results/Tendance_Saison/acf_residus_loess_total_price_weekly.png", width = 800, height = 500, res = 100)
     acf(residus, main = "Autocorrélation des résidus de la décomposition par polynômes locaux")
     dev.off()
 }
@@ -402,7 +415,7 @@ plot_house_weekly_xts <- ggplot(df_weekly_house_price, aes(x = week, y = price))
   labs(title = "Évolution du prix moyen des maisons vendues par semaine", y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_house_weekly_xts)
-ggsave("Projet/Results/Raw_Graphs/price_house_weekly.png", plot = plot_house_weekly_xts, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/price_house_weekly.png", plot = plot_house_weekly_xts, width = 8, height = 5, dpi = 300)
 
 # Graphique interactif
 if (plot_digraph == TRUE){
@@ -424,7 +437,7 @@ plot_total_price_weekly_xts_tendance <- ggplot(df_weekly_house_price, aes(x = we
   labs(title = "Évolution du prix moyen des maisons vendues par semaine", y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_total_price_weekly_xts_tendance)
-ggsave("Projet/Results/Raw_Graphs/price_house_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/price_house_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
 }
 
 # Tracer les graphiques de tendance et de saisonnalité
@@ -447,7 +460,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec tendance par moyenne mobile", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_tendance)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_moyenne_mobile_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_moyenne_mobile_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
 
     ## Par moyenne mobile = dégager la tendance + détecter la saisonnalité 
     K <- nb_points_moyenne_mobile_saison
@@ -461,7 +474,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec saisonnalité par moyenne mobile", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_saison)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_moyenne_mobile_saison.png", plot = plot_total_price_weekly_xts_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_moyenne_mobile_saison.png", plot = plot_total_price_weekly_xts_saison, width = 8, height = 5, dpi = 300)
 
     # Création du graphique avec tendance et saisonnalité
     plot_total_price_weekly_xts_tendance_saison <- ggplot(df_weekly_house_price, aes(x = week, y = price)) +
@@ -472,7 +485,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec tendance et saisonnalité par moyenne mobile", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_tendance_saison)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_moyenne_mobile_tendance_saison.png", plot = plot_total_price_weekly_xts_tendance_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_moyenne_mobile_tendance_saison.png", plot = plot_total_price_weekly_xts_tendance_saison, width = 8, height = 5, dpi = 300)
     
    
 ## Noyau Gaussien ##
@@ -499,7 +512,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec noyau gaussien", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_kernel)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_kernel_tendance.png", plot = plot_total_price_weekly_xts_kernel, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_kernel_tendance.png", plot = plot_total_price_weekly_xts_kernel, width = 8, height = 5, dpi = 300)
 
     # Extraction de la saisonnalité
     X.detrend <- X - as.numeric(ychap.kernel)
@@ -515,7 +528,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec saisonnalité par noyau gaussien", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_kernel_saison)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_kernel_saison.png", plot = plot_total_price_weekly_xts_kernel_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_kernel_saison.png", plot = plot_total_price_weekly_xts_kernel_saison, width = 8, height = 5, dpi = 300)
 
     # Création du graphique avec tendance et saisonnalité
     plot_total_price_weekly_xts_kernel_tendance_saison <- ggplot(df_weekly_house_price, aes(x = week, y = price)) +
@@ -526,12 +539,12 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec tendance et saisonnalité par noyau gaussien", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_kernel_tendance_saison)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_kernel_tendance_saison.png", plot = plot_total_price_weekly_xts_kernel_tendance_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_kernel_tendance_saison.png", plot = plot_total_price_weekly_xts_kernel_tendance_saison, width = 8, height = 5, dpi = 300)
 
     # Calcul de l'autocorrélation des résidus issus de la décomposition en tendance et saisonnalité
     residus <- price_house_weekly_xts - ychap.kernel - ychap.kernel.season
     # Save the ACF plot as a file
-    png("Projet/Results/Tendance_Saison/acf_residus_gaussien_price_house_weekly.png", width = 800, height = 500, res = 100)
+    png("Results/Tendance_Saison/acf_residus_gaussien_price_house_weekly.png", width = 800, height = 500, res = 100)
     acf(residus, main = "Autocorrélation des résidus de la décomposition par noyau gaussien")
     dev.off()
 
@@ -549,7 +562,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec polynômes locaux", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_loess)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_loess_tendance.png", plot = plot_total_price_weekly_xts_loess, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_loess_tendance.png", plot = plot_total_price_weekly_xts_loess, width = 8, height = 5, dpi = 300)
 
     # Extraction de la saisonnalité
     model.detrend <- df_weekly_house_price$price - model.lo
@@ -563,7 +576,7 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec saisonnalité par polynômes locaux", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_loess_saison)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_loess_saison.png", plot = plot_total_price_weekly_xts_loess_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_loess_saison.png", plot = plot_total_price_weekly_xts_loess_saison, width = 8, height = 5, dpi = 300)
 
     # Création du graphique avec tendance et saisonnalité
     plot_total_price_weekly_xts_loess_tendance_saison <- ggplot(df_weekly_house_price, aes(x = week, y = price)) +
@@ -574,12 +587,12 @@ if (plot_tendance_saison == TRUE){
       labs(title = "Évolution du prix moyen des maisons vendues par semaine avec tendance et saisonnalité par polynômes locaux", y = "Prix total (en €)", x = "Temps") +
       theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
     print(plot_total_price_weekly_xts_loess_tendance_saison)
-    ggsave("Projet/Results/Tendance_Saison/price_house_weekly_loess_tendance_saison.png", plot = plot_total_price_weekly_xts_loess_tendance_saison, width = 8, height = 5, dpi = 300)
+    ggsave("Results/Tendance_Saison/price_house_weekly_loess_tendance_saison.png", plot = plot_total_price_weekly_xts_loess_tendance_saison, width = 8, height = 5, dpi = 300)
 
     # Calcul de l'autocorrélation des résidus issus de la décomposition en tendance et saisonnalité
     residus <- df_weekly_house_price$price - model.lo
     # Save the ACF plot as a file
-    png("Projet/Results/Tendance_Saison/acf_residus_loess_price_house_weekly.png", width = 800, height = 500, res = 100)
+    png("Results/Tendance_Saison/acf_residus_loess_price_house_weekly.png", width = 800, height = 500, res = 100)
     acf(residus, main = "Autocorrélation des résidus de la décomposition par polynômes locaux")
     dev.off()
 }
@@ -605,7 +618,7 @@ plot_m2_xts <- ggplot(df_weekly_price_m2, aes(x = week, y = price_m2)) +
   labs(title = "Évolution du prix au m² par semaine", y = "Prix au m² (€)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_m2_xts)
-ggsave("Projet/Results/Raw_Graphs/price_m2_weekly.png", plot = plot_m2_xts, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/price_m2_weekly.png", plot = plot_m2_xts, width = 8, height = 5, dpi = 300)
 # Graphique interactif
 if (plot_digraph == TRUE){
 dygraph(price_m2_xts) %>%
@@ -626,7 +639,7 @@ plot_total_price_weekly_xts_tendance <- ggplot(df_weekly_price_m2, aes(x = week,
   labs(title = "Évolution du prix au m² par semaine", y = "Prix au m² (€)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_total_price_weekly_xts_tendance)
-ggsave("Projet/Results/Raw_Graphs/price_m2_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/price_m2_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
 }
 
 
@@ -645,7 +658,7 @@ plot_sales_weekly_xts <- ggplot(df_weekly_sales, aes(x = week, y = n_sales)) +
   labs(title = "Nombre de ventes par semaine", y = "Nombre de ventes", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_sales_weekly_xts)
-ggsave("Projet/Results/Raw_Graphs/sales_weekly.png", plot = plot_sales_weekly_xts, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/sales_weekly.png", plot = plot_sales_weekly_xts, width = 8, height = 5, dpi = 300)
 
 # Graphique interactif
 if (plot_digraph == TRUE){
@@ -666,7 +679,7 @@ plot_total_price_weekly_xts_tendance <- ggplot(df_weekly_sales, aes(x = week, y 
   labs(title = "Nombre de ventes par semaine", y = "Nombre de ventes", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_total_price_weekly_xts_tendance)
-ggsave("Projet/Results/Raw_Graphs/sales_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/sales_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
 }
 
 
@@ -686,7 +699,7 @@ plot_surface_weekly_xts <- ggplot(df_weekly_area, aes(x = week, y = area_total))
   labs(title = "Évolution de la surface moyenne des biens vendus par semaine", y = "Surface totale (m²)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_surface_weekly_xts)
-ggsave("Projet/Results/Raw_Graphs/area_weekly.png", plot = plot_surface_weekly_xts, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/area_weekly.png", plot = plot_surface_weekly_xts, width = 8, height = 5, dpi = 300)
 
 # Graphique interactif
 if (plot_digraph == TRUE){
@@ -707,7 +720,7 @@ plot_total_price_weekly_xts_tendance <- ggplot(df_weekly_area, aes(x = week, y =
   labs(title = "Évolution de la surface moyenne des biens vendus par semaine", y = "Surface totale (m²)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_total_price_weekly_xts_tendance)
-ggsave("Projet/Results/Raw_Graphs/area_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/area_weekly_tendance.png", plot = plot_total_price_weekly_xts_tendance, width = 8, height = 5, dpi = 300)
 }
 
     
@@ -726,7 +739,7 @@ plot_data_combined <- ggplot(data_combined, aes(x = index(data_combined))) +
   scale_color_manual(values = c("Prix total ajusté" = "blue", "Nombre de ventes" = "red")) +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_data_combined)
-ggsave("Projet/Results/Raw_Graphs/Combined/data_combined_total_price_sales_inverted.png", plot = plot_data_combined, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/Combined/data_combined_total_price_sales_inverted.png", plot = plot_data_combined, width = 8, height = 5, dpi = 300)
 colnames(data_combined) <- c("Prix total ajusté", "Nombre de ventes")
 
 if (plot_digraph) {
@@ -753,7 +766,7 @@ plot_data_combined <- ggplot(data_combined, aes(x = index(data_combined))) +
   scale_color_manual(values = c("Prix total ajusté" = "blue", "Prix au m² ajusté" = "green")) +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_data_combined)
-ggsave("Projet/Results/Raw_Graphs/Combined/data_combined_price_m2_inverted.png", plot = plot_data_combined, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/Combined/data_combined_price_m2_inverted.png", plot = plot_data_combined, width = 8, height = 5, dpi = 300)
 colnames(data_combined) <- c("Prix au m² ajusté", "Prix total ajusté")
 
 if (plot_digraph) {
@@ -781,7 +794,7 @@ plot_data_combined <- ggplot(data_combined, aes(x = index(data_combined))) +
   scale_color_manual(values = c("Prix moyen ajusté" = "orange", "Prix au m² ajusté" = "green")) +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_data_combined)
-ggsave("Projet/Results/Raw_Graphs/Combined/data_combined_house_m2_inverted.png", plot = plot_data_combined, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/Combined/data_combined_house_m2_inverted.png", plot = plot_data_combined, width = 8, height = 5, dpi = 300)
 colnames(data_combined) <- c("Prix au m² ajusté", "Prix moyen ajusté")
 
 if (plot_digraph) {
@@ -808,7 +821,7 @@ plot_data_combined <- ggplot(data_combined, aes(x = index(data_combined))) +
   scale_color_manual(values = c("Prix des maisons ajusté" = "blue", "Surface moyenne ajustée" = "purple")) +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_data_combined)
-ggsave("Projet/Results/Raw_Graphs/Combined/data_combined_house_area_inverted.png", plot = plot_data_combined, width = 8, height = 5, dpi = 300)
+ggsave("Results/Raw_Graphs/Combined/data_combined_house_area_inverted.png", plot = plot_data_combined, width = 8, height = 5, dpi = 300)
 colnames(data_combined) <- c("Surface moyenne ajustée", "Prix des maisons ajusté")
 
 if (plot_digraph) {
@@ -903,7 +916,7 @@ plot_total_price_weekly_xts_smooth <- ggplot(df_total_weekly_price, aes(x = week
   labs(title = "Évolution du prix total des maisons vendues par semaine avec lissage exponentiel simple", y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_total_price_weekly_xts_smooth)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_exp_simple_0_1.png", plot = plot_total_price_weekly_xts_smooth, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_exp_simple_0_1.png", plot = plot_total_price_weekly_xts_smooth, width = 8, height = 5, dpi = 300)
 
 # Tester différentes valeurs de alpha et visualiser l'erreur de prédiction
 alpha_seq <- seq(0.05, 0.95, length = 100)
@@ -915,7 +928,7 @@ plot_errors_alpha <- ggplot(data.frame(alpha = alpha_seq, error = errors), aes(x
   labs(title = "Erreur de prédiction en fonction de alpha", y = "Erreur quadratique moyenne", x = "Alpha") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_errors_alpha)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_exp_simple_errors_alpha.png", plot = plot_errors_alpha, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_exp_simple_errors_alpha.png", plot = plot_errors_alpha, width = 8, height = 5, dpi = 300)
 
 # Identifier le meilleur alpha et appliquer le lissage exponentiel simple
 best_alpha <- alpha_seq[which.min(errors)]
@@ -928,7 +941,7 @@ plot_total_price_weekly_xts_best <- ggplot(df_total_weekly_price, aes(x = week, 
   labs(title = paste("Évolution du prix total avec alpha =", round(best_alpha, 2)), y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_total_price_weekly_xts_best)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_exp_simple_best_alpha.png", plot = plot_total_price_weekly_xts_best, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_exp_simple_best_alpha.png", plot = plot_total_price_weekly_xts_best, width = 8, height = 5, dpi = 300)
 
 
 ## Exponentielle double ##
@@ -941,7 +954,7 @@ plot_errors_alpha_double <- ggplot(data.frame(alpha = alpha_seq, error = errors_
   labs(title = "Erreur de prédiction en fonction de alpha (lissage exponentiel double)", y = "Erreur quadratique moyenne", x = "Alpha") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_errors_alpha_double)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_exp_double_errors_alpha.png", plot = plot_errors_alpha_double, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_exp_double_errors_alpha.png", plot = plot_errors_alpha_double, width = 8, height = 5, dpi = 300)
 
 # Identifier le meilleur alpha et appliquer le lissage exponentiel double
 best_alpha_double <- alpha_seq[which.min(errors_double)]
@@ -954,7 +967,7 @@ plot_total_price_weekly_xts_best_double <- ggplot(df_total_weekly_price, aes(x =
   labs(title = paste("Évolution du prix total avec alpha =", round(best_alpha_double, 2), "(lissage exponentiel double)"), y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_total_price_weekly_xts_best_double)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_exp_double_best_alpha.png", plot = plot_total_price_weekly_xts_best_double, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_exp_double_best_alpha.png", plot = plot_total_price_weekly_xts_best_double, width = 8, height = 5, dpi = 300)
 
 
 
@@ -1021,7 +1034,7 @@ plot_predict_part <- ggplot(df_total_weekly_price, aes(x = week, y = price)) +
   labs(title = "Prédiction du prix total des maisons vendues par semaine", y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_predict_part)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_predict_part.png", plot = plot_predict_part, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_predict_part.png", plot = plot_predict_part, width = 8, height = 5, dpi = 300)
 
 # Modèles exponentiels
 ets_simple_best <- exp_simple(cac_0, best_alpha)
@@ -1043,7 +1056,7 @@ plot_predict_expo <- ggplot(df_total_weekly_price, aes(x = week, y = price)) +
   labs(title = "Prédiction du prix total des maisons vendues par semaine", y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_predict_expo)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_predict_expo.png", plot = plot_predict_expo, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_predict_expo.png", plot = plot_predict_expo, width = 8, height = 5, dpi = 300)
 
 # prédiction pour les modèles noyau gaussien et polynômes locaux
 # Prédiction pour le noyau gaussien
@@ -1064,7 +1077,7 @@ plot_predict_gauss_pol <- ggplot(df_total_weekly_price, aes(x = week, y = price)
   labs(title = "Prédiction du prix total des maisons vendues par semaine", y = "Prix total (en €)", x = "Temps") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Adjust for X and Y labels)
 print(plot_predict_gauss_pol)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_predict_gauss_pol.png", plot = plot_predict_gauss_pol, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_predict_gauss_pol.png", plot = plot_predict_gauss_pol, width = 8, height = 5, dpi = 300)
 
 
 
@@ -1104,7 +1117,7 @@ plot_predict_future <- ggplot(df_long, aes(x = time)) +
   labs(title = "Prévisions pour l'avenir à 1an avec différents modèles", y = "Prix Total", x = "Semaine", color = "Modèle", linetype = "Modèle") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Ajuster les étiquettes X et Y
 print(plot_predict_future)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_predict_1_an.png", plot = plot_predict_future, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_predict_1_an.png", plot = plot_predict_future, width = 8, height = 5, dpi = 300)
 
 
 
@@ -1191,7 +1204,7 @@ plot_cross_validation <- ggplot(df_plot, aes(x = time, y = actual)) +
   labs(title = "Prédiction Gaussienne sur une partie de cac_0", y = "Prix Total", x = "Semaine") +
   theme(plot.title = element_text(size = 10), axis.title = element_text(size = 12))  # Ajuster les étiquettes X et Y
 print(plot_cross_validation)
-ggsave("Projet/Results/Prédiction/price_total_price_weekly_cross_validation.png", plot = plot_cross_validation, width = 8, height = 5, dpi = 300)
+ggsave("Results/Prédiction/price_total_price_weekly_cross_validation.png", plot = plot_cross_validation, width = 8, height = 5, dpi = 300)
 
 
 
