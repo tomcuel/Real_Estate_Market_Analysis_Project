@@ -1,10 +1,7 @@
 # Real Estate Market Analysis Project 
-> In the context of a statistic lesson on times series, this project analyzes the real estate market in Ille-et-Vilaine, France. Using historical transaction data, we aim to identify key factors influencing house prices and develop simple predictive models to estimate future prices.
+> In the context of a statistics lesson on time series, this project analyzes the real estate market in Ille-et-Vilaine, France. Using historical transaction data, we aim to identify key factors influencing house prices and develop simple predictive models to estimate future prices.
 
-The dataset can be found on the Kaggle website via this (https://www.kaggle.com/datasets/cheneblanc/housing-prices-35-fr) or by searching by its name : Housing prices France 35
-it isn't in the repositery for size constraints matter because of GitHub 
-There will be a sample of the datasets, with all the interesting columns for out modelling
-everything is based of the inital dataset for the code, but there are representative datasets that can be used with a few tweaks
+The dataset can be found on the Kaggle website via this link(https://www.kaggle.com/datasets/cheneblanc/housing-prices-35-fr), or by searching for its name: Housing Prices France 35. Due to size constraints on GitHub, the dataset is not available in the repository. However, a sample of the dataset, containing only the relevant columns for modeling, is provided. All code is based on the initial dataset, though representative datasets can be used with minor adjustments.
 
 #### Tables of contents
 * [Path Tree](#path-tree)
@@ -36,6 +33,30 @@ Real_Estate_Market_Analysis_Project /
 
 
 ## Running the code 
+You must have install R, either using it directly in VS-Code, or R-Studio (simpler but worst to code on I think)
+
+On top of that you must install packages before using them  by making the following commmandes
+```
+install.packages("to_use")
+library(to_use)
+```
+In this project, I used for different purpose the librairies just below :  
+```
+xts
+dplyr
+tidyr
+dygraphs
+lubridate
+caret
+ggplot2
+GGally
+corrplot
+nortest
+scales
+zoo
+mgcv
+forecast
+```
 
 ## Overview 
 * Data preprocessing (outlier removal, missing value treatment, normalization).
